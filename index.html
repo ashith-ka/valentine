@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Sujishna ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: 42px 32px;
+      width: min(440px, 92%);
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 22px;
+      opacity: 0.95;
+    }
+
+    p {
+      font-size: 1.05rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 30px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .yes {
+      background: #ffeb3b;
+      color: #c2185b;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+    }
+
+    .no {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    .yes:hover,
+    .no:hover {
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 26px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      min-height: 1.5em;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      animation: rise 6s linear infinite;
+      opacity: 0.85;
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(100vh) scale(1);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      to {
+        transform: translateY(-10vh) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .surprise {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+      z-index: 10;
+    }
+
+    .surprise.show {
+      display: flex;
+    }
+
+    .surprise-card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(14px);
+      border-radius: 30px;
+      padding: 50px 36px;
+      max-width: 520px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .surprise h1 {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+    }
+
+    .surprise p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f7a2a0d2c.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="card">
+    <h1>Sujishna ❤️</h1>
+    <h2>Will you be my Valentine?</h2>
+    <p>You make ordinary days feel special, and my smile feels incomplete without you.</p>
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💖</button>
+      <button class="no" onmouseover="moveNo(this)">No 🙈</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="surprise" id="surprise">
+    <div class="surprise-card">
+      <h1>💖 Surprise 💖</h1>
+      <p>
+        Sujishna,<br><br>
+        From the moment you came into my life, everything felt warmer and brighter.
+        Thank you for being you — kind, beautiful, and endlessly special.
+        <br><br>
+        ❤️
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function sayYes() {
+      document.getElementById('result').textContent = "Yay! I knew it 💕";
+      document.getElementById('music').play();
+      for (let i = 0; i < 25; i++) createHeart();
+      setTimeout(showSurprise, 1500);
+    }
+
+    function showSurprise() {
+      document.getElementById('surprise').classList.add('show');
+    }
+
+    function moveNo(btn) {
+      const x = Math.random() * 220 - 110;
+      const y = Math.random() * 220 - 110;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 3 + Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+  </script>
+</body>
+
+</html>
