@@ -1,36 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>For Sujishna ❤️</title>
 
   <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --bg1: #ffdde1;
       --bg2: #ee9ca7;
-      --card-bg: rgba(255, 255, 255, 0.18);
+      --card-bg: rgba(255,255,255,0.18);
       --accent: #c2185b;
       --gold: #f7d774;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background:
-        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.35), transparent 45%),
-        radial-gradient(circle at 85% 30%, rgba(255, 182, 193, 0.35), transparent 45%),
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.35), transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(255,182,193,0.35), transparent 45%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
       display: flex;
       align-items: center;
@@ -44,23 +39,15 @@
       content: '';
       position: fixed;
       inset: -40%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 60%);
+      background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 60%);
       animation: ambient 16s ease-in-out infinite;
       z-index: 0;
     }
 
     @keyframes ambient {
-      0% {
-        transform: translate(-8%, -8%);
-      }
-
-      50% {
-        transform: translate(8%, 8%);
-      }
-
-      100% {
-        transform: translate(-8%, -8%);
-      }
+      0% { transform: translate(-8%, -8%); }
+      50% { transform: translate(8%, 8%); }
+      100% { transform: translate(-8%, -8%); }
     }
 
     main {
@@ -78,20 +65,13 @@
       border-radius: 28px;
       padding: 36px 28px 40px;
       text-align: center;
-      box-shadow: 0 32px 70px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 32px 70px rgba(0,0,0,0.28);
       animation: float 5s ease-in-out infinite;
     }
 
     @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     h1 {
@@ -131,22 +111,18 @@
       transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
     }
 
-    button:active {
-      transform: scale(0.96);
-    }
+    button:active { transform: scale(0.96); }
 
     .yes {
       background: linear-gradient(135deg, #fff3a0, var(--gold));
       color: var(--accent);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.25);
     }
 
-    .yes:hover {
-      transform: translateY(-2px);
-    }
+    .yes:hover { transform: translateY(-2px); }
 
     .no {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255,255,255,0.25);
       color: #fff;
     }
 
@@ -167,19 +143,9 @@
     }
 
     @keyframes rise {
-      from {
-        transform: translateY(100vh) scale(1);
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 1;
-      }
-
-      to {
-        transform: translateY(-10vh) scale(1.4);
-        opacity: 0;
-      }
+      from { transform: translateY(100vh) scale(1); opacity: 0; }
+      10% { opacity: 1; }
+      to { transform: translateY(-10vh) scale(1.4); opacity: 0; }
     }
 
     /* Surprise page */
@@ -187,8 +153,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.4), transparent 45%),
-        radial-gradient(circle at bottom right, rgba(255, 182, 193, 0.45), transparent 45%),
+        radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 45%),
+        radial-gradient(circle at bottom right, rgba(255,182,193,0.45), transparent 45%),
         linear-gradient(135deg, #fbc2eb, #a6c1ee);
       display: none;
       align-items: center;
@@ -197,32 +163,23 @@
       z-index: 20;
     }
 
-    .surprise.show {
-      display: flex;
-    }
+    .surprise.show { display: flex; }
 
     .surprise-card {
       max-width: 480px;
       width: 100%;
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255,255,255,0.22);
       backdrop-filter: blur(20px);
       border-radius: 32px;
       padding: 44px 32px;
       text-align: center;
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.3);
       animation: reveal .8s ease forwards;
     }
 
     @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(.96);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(20px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .surprise h1 {
@@ -238,17 +195,11 @@
 
     /* desktop tweaks */
     @media (min-width: 768px) {
-      .card {
-        padding: 44px 36px 48px;
-      }
-
-      .buttons {
-        gap: 22px;
-      }
+      .card { padding: 44px 36px 48px; }
+      .buttons { gap: 22px; }
     }
   </style>
 </head>
-
 <body>
 
   <audio id="music" loop>
@@ -286,9 +237,24 @@
   <script>
     function sayYes() {
       document.getElementById('result').textContent = 'Yay! I knew it 💕';
+
+      // subtle haptic feedback (mobile only)
+      if (navigator.vibrate) {
+        navigator.vibrate([20, 30, 20]); // light, premium tap — not aggressive
+      }
+
       document.getElementById('music').play();
+
       for (let i = 0; i < 18; i++) createHeart();
-      setTimeout(() => document.getElementById('surprise').classList.add('show'), 1200);
+
+      setTimeout(() => {
+        document.getElementById('surprise').classList.add('show');
+
+        // soft follow-up haptic on reveal
+        if (navigator.vibrate) {
+          navigator.vibrate(25);
+        }
+      }, 1200);
     }
 
     function moveNo(btn) {
@@ -308,5 +274,4 @@
     }
   </script>
 </body>
-
 </html>
