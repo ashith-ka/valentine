@@ -5,61 +5,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>For Sujishna ❤️</title>
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
   <style>
+    :root {
+      --bg1: #ffdde1;
+      --bg2: #ee9ca7;
+      --card-bg: rgba(255, 255, 255, 0.18);
+      --accent: #c2185b;
+      --gold: #f7d774;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      height: 100vh;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background:
-        radial-gradient(circle at 20% 20%, rgba(24, 16, 16, 0.25), transparent 40%),
-        radial-gradient(circle at 80% 30%, rgba(255, 182, 193, 0.35), transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255, 105, 180, 0.25), transparent 45%),
-        linear-gradient(135deg, #ff758c, #ffb199);
+        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(255, 182, 193, 0.35), transparent 45%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    /* soft animated glow */
+    /* subtle animated ambient light */
     body::before {
       content: '';
-      position: absolute;
-      inset: -50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
-      animation: glowMove 12s linear infinite;
+      position: fixed;
+      inset: -40%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 60%);
+      animation: ambient 16s ease-in-out infinite;
+      z-index: 0;
     }
 
-    @keyframes glowMove {
+    @keyframes ambient {
       0% {
-        transform: translate(-10%, -10%);
+        transform: translate(-8%, -8%);
       }
 
       50% {
-        transform: translate(10%, 10%);
+        transform: translate(8%, 8%);
       }
 
       100% {
-        transform: translate(-10%, -10%);
+        transform: translate(-8%, -8%);
       }
     }
 
-    .card {
+    main {
       position: relative;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(16px);
-      border-radius: 30px;
-      padding: 44px 34px;
-      width: min(460px, 92%);
-      text-align: center;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
-      animation: float 4s ease-in-out infinite;
+      width: 100%;
+      padding: 24px;
       z-index: 1;
+    }
+
+    .card {
+      margin: 0 auto;
+      max-width: 420px;
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: 36px 28px 40px;
+      text-align: center;
+      box-shadow: 0 32px 70px rgba(0, 0, 0, 0.28);
+      animation: float 5s ease-in-out infinite;
     }
 
     @keyframes float {
@@ -70,77 +90,79 @@
       }
 
       50% {
-        transform: translateY(-12px);
+        transform: translateY(-10px);
       }
     }
 
     h1 {
-      font-size: 2.4rem;
-      margin-bottom: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 2.5rem);
+      margin: 0 0 6px;
+      letter-spacing: 0.3px;
     }
 
     h2 {
-      font-size: 1.35rem;
       font-weight: 500;
-      margin-bottom: 22px;
+      font-size: 1.15rem;
+      margin: 0 0 20px;
       opacity: 0.95;
     }
 
     p {
-      font-size: 1.08rem;
-      margin-bottom: 32px;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      margin: 0 0 28px;
       opacity: 0.95;
     }
 
     .buttons {
       display: flex;
-      gap: 20px;
+      gap: 16px;
       justify-content: center;
-      flex-wrap: wrap;
     }
 
     button {
       border: none;
       border-radius: 999px;
-      padding: 15px 32px;
-      font-size: 1.05rem;
+      padding: 14px 28px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
     }
 
     button:active {
-      transform: scale(0.95);
+      transform: scale(0.96);
     }
 
     .yes {
-      background: linear-gradient(135deg, #fff176, #ffd54f);
-      color: #c2185b;
+      background: linear-gradient(135deg, #fff3a0, var(--gold));
+      color: var(--accent);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
     }
 
-    .no {
-      background: rgba(255, 255, 255, 0.28);
-      color: #fff;
-    }
-
-    .yes:hover,
-    .no:hover {
+    .yes:hover {
       transform: translateY(-2px);
     }
 
-    .result {
-      margin-top: 28px;
-      font-size: 1.25rem;
-      font-weight: 600;
-      min-height: 1.5em;
+    .no {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
     }
 
+    .result {
+      margin-top: 22px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      min-height: 1.4em;
+    }
+
+    /* floating hearts kept minimal */
     .heart {
-      position: absolute;
-      font-size: 22px;
-      animation: rise 6s linear infinite;
-      opacity: 0.85;
+      position: fixed;
+      font-size: 20px;
+      animation: rise 6s linear forwards;
+      opacity: 0.8;
       pointer-events: none;
     }
 
@@ -155,7 +177,7 @@
       }
 
       to {
-        transform: translateY(-10vh) scale(1.5);
+        transform: translateY(-10vh) scale(1.4);
         opacity: 0;
       }
     }
@@ -165,38 +187,14 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.35), transparent 40%),
-        radial-gradient(circle at bottom right, rgba(255, 182, 193, 0.4), transparent 45%),
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.4), transparent 45%),
+        radial-gradient(circle at bottom right, rgba(255, 182, 193, 0.45), transparent 45%),
         linear-gradient(135deg, #fbc2eb, #a6c1ee);
       display: none;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 40px;
-      z-index: 10;
-      overflow: hidden;
-    }
-
-    .surprise::after {
-      content: '✨✨✨';
-      position: absolute;
-      font-size: 3rem;
-      opacity: 0.25;
-      animation: sparkle 6s linear infinite;
-    }
-
-    @keyframes sparkle {
-      0% {
-        transform: translate(-30%, 30%) rotate(0deg);
-      }
-
-      50% {
-        transform: translate(30%, -30%) rotate(180deg);
-      }
-
-      100% {
-        transform: translate(-30%, 30%) rotate(360deg);
-      }
+      padding: 28px;
+      z-index: 20;
     }
 
     .surprise.show {
@@ -204,45 +202,75 @@
     }
 
     .surprise-card {
-      position: relative;
+      max-width: 480px;
+      width: 100%;
       background: rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(18px);
-      border-radius: 34px;
-      padding: 54px 40px;
-      max-width: 540px;
-      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.3);
-      z-index: 1;
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      padding: 44px 32px;
+      text-align: center;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+      animation: reveal .8s ease forwards;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .surprise h1 {
-      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
       margin-bottom: 18px;
     }
 
     .surprise p {
-      font-size: 1.2rem;
+      font-size: 1.08rem;
       line-height: 1.7;
+    }
+
+    /* desktop tweaks */
+    @media (min-width: 768px) {
+      .card {
+        padding: 44px 36px 48px;
+      }
+
+      .buttons {
+        gap: 22px;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <audio id="music" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f7a2a0d2c.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="card">
-    <h1>Sujishna ❤️</h1>
-    <h2>Will you be my Valentine?</h2>
-    <p>You make ordinary days feel magical, and my smile feels incomplete without you.</p>
-    <div class="buttons">
-      <button class="yes" onclick="sayYes()">Yes 💖</button>
-      <button class="no" onmouseover="moveNo(this)">No 🙈</button>
-    </div>
-    <div class="result" id="result"></div>
-  </div>
+  <main>
+    <section class="card">
+      <h1>Sujishna ❤️</h1>
+      <h2>Will you be my Valentine?</h2>
+      <p>You make ordinary days feel magical, and my smile feels incomplete without you.</p>
 
-  <div class="surprise" id="surprise">
+      <div class="buttons">
+        <button class="yes" onclick="sayYes()">Yes 💖</button>
+        <button class="no" onmouseover="moveNo(this)">No 🙈</button>
+      </div>
+
+      <div class="result" id="result"></div>
+    </section>
+  </main>
+
+  <section class="surprise" id="surprise">
     <div class="surprise-card">
       <h1>💖 Surprise 💖</h1>
       <p>
@@ -250,26 +278,22 @@
         From the moment you came into my life, everything felt warmer and brighter.
         Thank you for being you — kind, beautiful, and endlessly special.
         <br><br>
-        ❤️
+        Happy Valentine’s Day ❤️
       </p>
     </div>
-  </div>
+  </section>
 
   <script>
     function sayYes() {
-      document.getElementById('result').textContent = "Yay! I knew it 💕";
+      document.getElementById('result').textContent = 'Yay! I knew it 💕';
       document.getElementById('music').play();
-      for (let i = 0; i < 30; i++) createHeart();
-      setTimeout(showSurprise, 1500);
-    }
-
-    function showSurprise() {
-      document.getElementById('surprise').classList.add('show');
+      for (let i = 0; i < 18; i++) createHeart();
+      setTimeout(() => document.getElementById('surprise').classList.add('show'), 1200);
     }
 
     function moveNo(btn) {
-      const x = Math.random() * 240 - 120;
-      const y = Math.random() * 240 - 120;
+      const x = Math.random() * 220 - 110;
+      const y = Math.random() * 220 - 110;
       btn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
