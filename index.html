@@ -14,7 +14,11 @@
       margin: 0;
       height: 100vh;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255, 182, 193, 0.35), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255, 105, 180, 0.25), transparent 45%),
+        linear-gradient(135deg, #ff758c, #ffb199);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,15 +26,40 @@
       overflow: hidden;
     }
 
+    /* soft animated glow */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
+      animation: glowMove 12s linear infinite;
+    }
+
+    @keyframes glowMove {
+      0% {
+        transform: translate(-10%, -10%);
+      }
+
+      50% {
+        transform: translate(10%, 10%);
+      }
+
+      100% {
+        transform: translate(-10%, -10%);
+      }
+    }
+
     .card {
+      position: relative;
       background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(14px);
-      border-radius: 28px;
-      padding: 42px 32px;
-      width: min(440px, 92%);
+      backdrop-filter: blur(16px);
+      border-radius: 30px;
+      padding: 44px 34px;
+      width: min(460px, 92%);
       text-align: center;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
       animation: float 4s ease-in-out infinite;
+      z-index: 1;
     }
 
     @keyframes float {
@@ -41,31 +70,31 @@
       }
 
       50% {
-        transform: translateY(-10px);
+        transform: translateY(-12px);
       }
     }
 
     h1 {
-      font-size: 2.3rem;
-      margin-bottom: 10px;
+      font-size: 2.4rem;
+      margin-bottom: 8px;
     }
 
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 500;
       margin-bottom: 22px;
       opacity: 0.95;
     }
 
     p {
-      font-size: 1.05rem;
-      margin-bottom: 30px;
+      font-size: 1.08rem;
+      margin-bottom: 32px;
       opacity: 0.95;
     }
 
     .buttons {
       display: flex;
-      gap: 18px;
+      gap: 20px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -73,7 +102,7 @@
     button {
       border: none;
       border-radius: 999px;
-      padding: 14px 30px;
+      padding: 15px 32px;
       font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
@@ -85,13 +114,13 @@
     }
 
     .yes {
-      background: #ffeb3b;
+      background: linear-gradient(135deg, #fff176, #ffd54f);
       color: #c2185b;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
     }
 
     .no {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.28);
       color: #fff;
     }
 
@@ -101,8 +130,8 @@
     }
 
     .result {
-      margin-top: 26px;
-      font-size: 1.2rem;
+      margin-top: 28px;
+      font-size: 1.25rem;
       font-weight: 600;
       min-height: 1.5em;
     }
@@ -112,6 +141,7 @@
       font-size: 22px;
       animation: rise 6s linear infinite;
       opacity: 0.85;
+      pointer-events: none;
     }
 
     @keyframes rise {
@@ -125,21 +155,48 @@
       }
 
       to {
-        transform: translateY(-10vh) scale(1.4);
+        transform: translateY(-10vh) scale(1.5);
         opacity: 0;
       }
     }
 
+    /* Surprise page */
     .surprise {
       position: fixed;
       inset: 0;
-      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.35), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(255, 182, 193, 0.4), transparent 45%),
+        linear-gradient(135deg, #fbc2eb, #a6c1ee);
       display: none;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 40px;
       z-index: 10;
+      overflow: hidden;
+    }
+
+    .surprise::after {
+      content: '✨✨✨';
+      position: absolute;
+      font-size: 3rem;
+      opacity: 0.25;
+      animation: sparkle 6s linear infinite;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translate(-30%, 30%) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(30%, -30%) rotate(180deg);
+      }
+
+      100% {
+        transform: translate(-30%, 30%) rotate(360deg);
+      }
     }
 
     .surprise.show {
@@ -147,22 +204,24 @@
     }
 
     .surprise-card {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(14px);
-      border-radius: 30px;
-      padding: 50px 36px;
-      max-width: 520px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+      position: relative;
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(18px);
+      border-radius: 34px;
+      padding: 54px 40px;
+      max-width: 540px;
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.3);
+      z-index: 1;
     }
 
     .surprise h1 {
-      font-size: 2.4rem;
-      margin-bottom: 16px;
+      font-size: 2.5rem;
+      margin-bottom: 18px;
     }
 
     .surprise p {
       font-size: 1.2rem;
-      line-height: 1.6;
+      line-height: 1.7;
     }
   </style>
 </head>
@@ -175,7 +234,7 @@
   <div class="card">
     <h1>Sujishna ❤️</h1>
     <h2>Will you be my Valentine?</h2>
-    <p>You make ordinary days feel special, and my smile feels incomplete without you.</p>
+    <p>You make ordinary days feel magical, and my smile feels incomplete without you.</p>
     <div class="buttons">
       <button class="yes" onclick="sayYes()">Yes 💖</button>
       <button class="no" onmouseover="moveNo(this)">No 🙈</button>
@@ -191,7 +250,7 @@
         From the moment you came into my life, everything felt warmer and brighter.
         Thank you for being you — kind, beautiful, and endlessly special.
         <br><br>
-        ❤️
+        Happy Valentine’s Day ❤️
       </p>
     </div>
   </div>
@@ -200,7 +259,7 @@
     function sayYes() {
       document.getElementById('result').textContent = "Yay! I knew it 💕";
       document.getElementById('music').play();
-      for (let i = 0; i < 25; i++) createHeart();
+      for (let i = 0; i < 30; i++) createHeart();
       setTimeout(showSurprise, 1500);
     }
 
@@ -209,8 +268,8 @@
     }
 
     function moveNo(btn) {
-      const x = Math.random() * 220 - 110;
-      const y = Math.random() * 220 - 110;
+      const x = Math.random() * 240 - 120;
+      const y = Math.random() * 240 - 120;
       btn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
