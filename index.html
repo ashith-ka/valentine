@@ -199,6 +199,20 @@
       cursor: pointer;
     }
 
+    /* larger hit areas and touch feedback for mobile */
+    .heart.touch-feedback {
+      transition: transform 140ms ease-out, opacity 300ms linear;
+      transform-origin: center center;
+    }
+
+    @media (pointer: coarse) {
+      .heart {
+        font-size: 28px;
+        padding: 8px;
+        /* larger tap target */
+      }
+    }
+
     @keyframes rise {
       from {
         transform: translateY(100vh) scale(1);
@@ -455,6 +469,15 @@
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f7a2a0d2c.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Controls: Sound & Haptics opt-in -->
+  <div id="controls" style="position:fixed;right:14px;top:14px;z-index:120;">
+    <label
+      style="background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);padding:8px 10px;border-radius:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff;">
+      <input id="toggleSound" type="checkbox" style="width:16px;height:16px;" />
+      <span>Sound & Haptics</span>
+    </label>
+  </div>
+
   <main>
     <section class="card">
       <h1>Sujishna <span class="beating-heart">❤️</span></h1>
@@ -485,6 +508,58 @@
   </section>
 
   <script>
+    // device capability detection and settings
+    const isLowPower = (() => {
+      try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+        const deviceMem = navigator.deviceMemory || 4;
+        const hw = navigator.hardwareConcurrency || 4;
+        return deviceMem <= 1.5 || hw <= 2;
+      } catch (e) {
+        return false;
+      }
+    })();
+
+    function getSplitCount() { return isLowPower ? 3 : 5; }
+    function getInitialHeartCount() { return isLowPower ? 18 : 40; }
+    const maxHearts = isLowPower ? 30 : 120;
+
+    // sound & haptics opt-in
+    let soundEnabled = localStorage.getItem('valentineSound') === 'true';
+    window.addEventListener('DOMContentLoaded', () => {
+      const cb = document.getElementById('toggleSound');
+      if (cb) {
+        cb.checked = soundEnabled;
+        cb.addEventListener('change', (e) => {
+          soundEnabled = !!e.target.checked;
+          localStorage.setItem('valentineSound', soundEnabled ? 'true' : 'false');
+          if (soundEnabled && navigator.vibrate) navigator.vibrate(15);
+        });
+      }
+    });
+
+    // simple pop sound using WebAudio
+    const audioCtx = (typeof AudioContext !== 'undefined') ? new AudioContext() : null;
+    function playPop() {
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => { });
+      }
+      const bufferSize = 0.2 * audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+      }
+      const src = audioCtx.createBufferSource();
+      src.buffer = buffer;
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0.18;
+      src.connect(gain).connect(audioCtx.destination);
+      src.start();
+      setTimeout(() => { try { src.stop(); } catch (e) { } }, 300);
+    }
+
     function sayYes() {
       document.getElementById('result').textContent = 'Yay! I knew it 💕';
 
@@ -495,7 +570,8 @@
 
       document.getElementById('music').play();
 
-      for (let i = 0; i < 40; i++) createHeart();
+      const initial = getInitialHeartCount();
+      for (let i = 0; i < initial; i++) createHeart();
       createConfetti();
 
       setTimeout(() => {
@@ -519,6 +595,8 @@
     }
 
     function createHeart() {
+      // avoid overloading low-power devices
+      if (document.querySelectorAll('.heart').length >= maxHearts) return;
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.textContent = '❤️';
@@ -527,24 +605,36 @@
       heart.style.cursor = 'pointer';
       document.body.appendChild(heart);
 
-      // make heart clickable/touchable to split
-      const handleHeartInteraction = (e) => {
+      // touch/click feedback
+      const onInteract = (e) => {
         e.stopPropagation();
+        // visual feedback
+        heart.classList.add('touch-feedback');
+        heart.style.transform = 'scale(1.15)';
+        setTimeout(() => {
+          heart.style.transform = '';
+          heart.classList.remove('touch-feedback');
+        }, 160);
+
+        // optional sound & haptics
+        if (soundEnabled) playPop();
+        if (soundEnabled && navigator.vibrate) navigator.vibrate(18);
+
         const rect = heart.getBoundingClientRect();
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
 
-        // create five smaller hearts moving in different directions
-        for (let i = 0; i < 5; i++) {
-          const angle = (i / 5) * Math.PI * 2;
+        const splitCount = getSplitCount();
+        for (let i = 0; i < splitCount; i++) {
+          const angle = (i / splitCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
           createSplitHeart(x, y, angle);
         }
 
         heart.remove();
       };
 
-      heart.addEventListener('click', handleHeartInteraction);
-      heart.addEventListener('touchstart', handleHeartInteraction);
+      heart.addEventListener('click', onInteract);
+      heart.addEventListener('touchstart', onInteract, { passive: true });
 
       setTimeout(() => {
         if (heart.parentElement) heart.remove();
@@ -567,19 +657,24 @@
       // animate split hearts moving in opposite directions
       let posX = x;
       let posY = y;
-      let velocityX = Math.cos(direction) * 4;
-      let velocityY = Math.sin(direction) * 4 - 3;
+      // use a larger velocity multiplier on capable devices
+      const velMult = isLowPower ? 3 : 6;
+      let velocityX = Math.cos(direction) * velMult * (0.8 + Math.random() * 0.8);
+      let velocityY = Math.sin(direction) * velMult * (0.6 + Math.random() * 0.8) - (isLowPower ? 2 : 3);
       let opacity = 1;
+      let scale = 1;
 
       const animate = () => {
         posX += velocityX;
         posY += velocityY;
-        velocityY += 0.1;
-        opacity -= 0.01;
+        velocityY += 0.12; // gravity
+        opacity -= 0.012;
+        scale += 0.002;
 
         splitHeart.style.left = posX + 'px';
         splitHeart.style.top = posY + 'px';
         splitHeart.style.opacity = opacity;
+        splitHeart.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
         if (opacity > 0) {
           requestAnimationFrame(animate);
@@ -600,7 +695,8 @@
 
     function triggerFireworks() {
       const emojis = ['✨', '🎆', '⭐', '💫', '🌟'];
-      for (let i = 0; i < 30; i++) {
+      const fwCount = isLowPower ? 12 : 30;
+      for (let i = 0; i < fwCount; i++) {
         setTimeout(() => {
           const x = window.innerWidth / 2;
           const y = 60;
@@ -632,7 +728,8 @@
     function createConfetti() {
       const colors = ['#ff6b9d', '#ffc75f', '#845ef7', '#00d084', '#00b4d8'];
       const confettiPieces = ['🎉', '✨', '🎊', '💝', '🌹'];
-      for (let i = 0; i < 50; i++) {
+      const pieces = isLowPower ? 20 : 50;
+      for (let i = 0; i < pieces; i++) {
         setTimeout(() => {
           const confetti = document.createElement('div');
           confetti.className = 'confetti';
