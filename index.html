@@ -148,15 +148,36 @@
       background: linear-gradient(135deg, #fff3a0, var(--gold));
       color: var(--accent);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
     }
 
     .yes:hover {
-      transform: translateY(-2px);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+      animation: bounce 0.6s ease infinite;
     }
 
     .no {
       background: rgba(255, 255, 255, 0.25);
       color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .no:hover {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(-4px) scale(1.05);
+      }
+
+      50% {
+        transform: translateY(-8px) scale(1.05);
+      }
     }
 
     .result {
@@ -292,6 +313,75 @@
       animation: explode 1.2s ease-out forwards;
     }
 
+    /* confetti styles */
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1rem;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .confetti {
+      animation: confetti-fall 3s ease-in forwards;
+    }
+
+    /* floating roses */
+    .rose {
+      position: fixed;
+      font-size: 24px;
+      animation: float-rose 8s ease-in-out infinite;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    @keyframes float-rose {
+
+      0%,
+      100% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.7;
+      }
+
+      25% {
+        transform: translateY(-100px) translateX(80px) rotate(20deg);
+      }
+
+      50% {
+        transform: translateY(-200px) translateX(0) rotate(0deg);
+        opacity: 0.9;
+      }
+
+      75% {
+        transform: translateY(-100px) translateX(-80px) rotate(-20deg);
+      }
+    }
+
+    /* sparkle effect */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 0.8rem;
+      animation: sparkle-twinkle 1s ease-in-out forwards;
+    }
+
+    @keyframes sparkle-twinkle {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
     /* desktop tweaks */
     @media (min-width: 480px) {
       .buttons {
@@ -363,10 +453,12 @@
       document.getElementById('music').play();
 
       for (let i = 0; i < 40; i++) createHeart();
+      createConfetti();
 
       setTimeout(() => {
         document.getElementById('surprise').classList.add('show');
         triggerFireworks();
+        createFloatingRoses();
 
         // soft follow-up haptic on reveal
         if (navigator.vibrate) {
@@ -401,6 +493,13 @@
       }
     }, 500);
 
+    // cursor sparkle effect
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.92) {
+        createSparkle(e.clientX, e.clientY);
+      }
+    });
+
     function triggerFireworks() {
       const emojis = ['✨', '🎆', '⭐', '💫', '🌟'];
       for (let i = 0; i < 30; i++) {
@@ -430,6 +529,50 @@
 
       document.getElementById('surprise').appendChild(particle);
       setTimeout(() => particle.remove(), 1200);
+    }
+
+    function createConfetti() {
+      const colors = ['#ff6b9d', '#ffc75f', '#845ef7', '#00d084', '#00b4d8'];
+      const confettiPieces = ['🎉', '✨', '🎊', '💝', '🌹'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.textContent = confettiPieces[Math.floor(Math.random() * confettiPieces.length)];
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.top = '-20px';
+          confetti.style.animation = `confetti-fall ${2 + Math.random() * 1}s ease-in forwards`;
+          confetti.style.delay = i * 20 + 'ms';
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 3000);
+        }, i * 30);
+      }
+    }
+
+    function createFloatingRoses() {
+      const surpriseElement = document.getElementById('surprise');
+      const roses = 5;
+      for (let i = 0; i < roses; i++) {
+        const rose = document.createElement('div');
+        rose.className = 'rose';
+        rose.textContent = '🌹';
+        rose.style.left = Math.random() * 90 + 5 + 'vw';
+        rose.style.top = Math.random() * 100 + 'vh';
+        rose.style.animationDelay = i * 0.5 + 's';
+        rose.style.animationDuration = (6 + Math.random() * 4) + 's';
+        surpriseElement.appendChild(rose);
+      }
+    }
+
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.textContent = '✨';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      sparkle.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1000);
     }
   </script>
 </body>
