@@ -478,6 +478,13 @@
     </label>
   </div>
 
+  <!-- Hearts popped counter (persistent) -->
+  <div id="heartCounter"
+    style="position:fixed;left:14px;top:14px;z-index:120;background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);padding:8px 10px;border-radius:12px;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff;">
+    <span style="opacity:0.95;">Hearts popped:</span>
+    <strong id="heartCounterValue" style="min-width:28px;text-align:right;display:inline-block">0</strong>
+  </div>
+
   <main>
     <section class="card">
       <h1>Sujishna <span class="beating-heart">❤️</span></h1>
@@ -536,6 +543,16 @@
           if (soundEnabled && navigator.vibrate) navigator.vibrate(15);
         });
       }
+    });
+
+    // persistent hearts popped counter
+    let heartsPopped = parseInt(localStorage.getItem('heartsPopped') || '0', 10) || 0;
+    function updateHeartCounterDisplay() {
+      const el = document.getElementById('heartCounterValue');
+      if (el) el.textContent = heartsPopped;
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      updateHeartCounterDisplay();
     });
 
     // simple pop sound using WebAudio
@@ -629,6 +646,11 @@
           const angle = (i / splitCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
           createSplitHeart(x, y, angle);
         }
+
+        // increment persistent counter for popped hearts
+        heartsPopped = (heartsPopped || 0) + 1;
+        try { localStorage.setItem('heartsPopped', String(heartsPopped)); } catch (e) { }
+        updateHeartCounterDisplay();
 
         heart.remove();
       };
