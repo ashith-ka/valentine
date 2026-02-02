@@ -47,6 +47,7 @@
       background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 60%);
       animation: ambient 16s ease-in-out infinite;
       z-index: 0;
+      pointer-events: none;
     }
 
     @keyframes ambient {
@@ -193,7 +194,9 @@
       font-size: 20px;
       animation: rise 6s linear forwards;
       opacity: 0.8;
-      pointer-events: none;
+      pointer-events: auto;
+      z-index: 50;
+      cursor: pointer;
     }
 
     @keyframes rise {
@@ -480,9 +483,70 @@
       heart.className = 'heart';
       heart.textContent = '❤️';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = 3 + Math.random() * 3 + 's';
+      heart.style.animationDuration = 8 + Math.random() * 4 + 's';
+      heart.style.cursor = 'pointer';
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
+
+      // make heart clickable/touchable to split
+      const handleHeartInteraction = (e) => {
+        e.stopPropagation();
+        const rect = heart.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        // create two smaller hearts moving in different directions
+        createSplitHeart(x, y, -50);
+        createSplitHeart(x, y, 50);
+
+        heart.remove();
+      };
+
+      heart.addEventListener('click', handleHeartInteraction);
+      heart.addEventListener('touchstart', handleHeartInteraction);
+
+      setTimeout(() => {
+        if (heart.parentElement) heart.remove();
+      }, 13000);
+    }
+
+    function createSplitHeart(x, y, direction) {
+      const splitHeart = document.createElement('div');
+      splitHeart.textContent = '❤️';
+      splitHeart.style.position = 'fixed';
+      splitHeart.style.left = x + 'px';
+      splitHeart.style.top = y + 'px';
+      splitHeart.style.fontSize = '14px';
+      splitHeart.style.pointerEvents = 'none';
+      splitHeart.style.margin = '0';
+      splitHeart.style.padding = '0';
+      splitHeart.style.transform = 'translate(-50%, -50%)';
+      document.body.appendChild(splitHeart);
+
+      // animate split hearts moving in opposite directions
+      let posX = x;
+      let posY = y;
+      let velocityX = direction;
+      let velocityY = -2;
+      let opacity = 1;
+
+      const animate = () => {
+        posX += velocityX * 0.2;
+        posY += velocityY;
+        velocityY += 0.1;
+        opacity -= 0.01;
+
+        splitHeart.style.left = posX + 'px';
+        splitHeart.style.top = posY + 'px';
+        splitHeart.style.opacity = opacity;
+
+        if (opacity > 0) {
+          requestAnimationFrame(animate);
+        } else {
+          splitHeart.remove();
+        }
+      };
+
+      animate();
     }
 
     // continuously create floating hearts in background
