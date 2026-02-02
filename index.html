@@ -428,6 +428,24 @@
         transform: scale(1);
       }
     }
+
+    /* easter egg glow effect */
+    @keyframes glow-burst {
+      0% {
+        text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
+        transform: scale(1);
+      }
+
+      50% {
+        text-shadow: 0 0 20px #ff1493, 0 0 30px #ff69b4, 0 0 40px #ffc0cb;
+        transform: scale(1.2);
+      }
+
+      100% {
+        text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
+        transform: scale(1);
+      }
+    }
   </style>
 </head>
 
@@ -516,9 +534,11 @@
         const x = rect.left + rect.width / 2;
         const y = rect.top + rect.height / 2;
 
-        // create two smaller hearts moving in different directions
-        createSplitHeart(x, y, -50);
-        createSplitHeart(x, y, 50);
+        // create five smaller hearts moving in different directions
+        for (let i = 0; i < 5; i++) {
+          const angle = (i / 5) * Math.PI * 2;
+          createSplitHeart(x, y, angle);
+        }
 
         heart.remove();
       };
@@ -547,12 +567,12 @@
       // animate split hearts moving in opposite directions
       let posX = x;
       let posY = y;
-      let velocityX = direction;
-      let velocityY = -2;
+      let velocityX = Math.cos(direction) * 4;
+      let velocityY = Math.sin(direction) * 4 - 3;
       let opacity = 1;
 
       const animate = () => {
-        posX += velocityX * 0.2;
+        posX += velocityX;
         posY += velocityY;
         velocityY += 0.1;
         opacity -= 0.01;
@@ -570,14 +590,6 @@
 
       animate();
     }
-
-    // continuously create floating hearts in background
-    createHeart(); // create one immediately on page load
-    setInterval(() => {
-      if (!document.getElementById('surprise').classList.contains('show')) {
-        createHeart();
-      }
-    }, 500);
 
     // cursor sparkle effect
     document.addEventListener('mousemove', (e) => {
@@ -659,6 +671,84 @@
       sparkle.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
       document.body.appendChild(sparkle);
       setTimeout(() => sparkle.remove(), 1000);
+    }
+
+    // easter egg: click the beating heart 5 times to unlock secret
+    let heartClickCount = 0;
+
+    function setupEasterEgg() {
+      const beatingHeart = document.querySelector('.beating-heart');
+      if (beatingHeart) {
+        beatingHeart.style.cursor = 'pointer';
+        beatingHeart.style.userSelect = 'none';
+        beatingHeart.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          heartClickCount++;
+
+          // trigger glow burst effect
+          beatingHeart.style.animation = 'none';
+          setTimeout(() => {
+            beatingHeart.style.animation = 'glow-burst 0.6s ease-in-out';
+          }, 10);
+
+          if (heartClickCount === 5) {
+            triggerEasterEgg();
+            heartClickCount = 0;
+          }
+        });
+      }
+    }
+
+    // Setup easter egg immediately and on load
+    document.addEventListener('DOMContentLoaded', () => {
+      setupEasterEgg();
+      createHeart(); // create one heart immediately on page load
+      setInterval(() => {
+        if (!document.getElementById('surprise').classList.contains('show')) {
+          createHeart();
+        }
+      }, 500);
+    });
+
+    // Initialize everything when DOM is ready
+    function initializeApp() {
+      setupEasterEgg();
+      createHeart();
+      setInterval(() => {
+        if (!document.getElementById('surprise').classList.contains('show')) {
+          createHeart();
+        }
+      }, 500);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeApp);
+    } else {
+      initializeApp();
+    }
+
+    function triggerEasterEgg() {
+      // create a burst of extra hearts from the center
+      for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+          createHeart();
+        }, i * 30);
+      }
+
+      // create confetti burst
+      createConfetti();
+
+      // show easter egg message
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) {
+        resultDiv.textContent = '✨ Secret unlocked! You found the easter egg! ✨';
+        resultDiv.style.color = '#ff69b4';
+        resultDiv.style.fontSize = '1rem';
+        setTimeout(() => {
+          resultDiv.textContent = '';
+        }, 3000);
+      }
     }
   </script>
 </body>
