@@ -3,10 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>For Sujishna ❤️</title>
+  <meta name="theme-color" content="#c2185b">
 
   <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet">
@@ -22,11 +25,14 @@
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
+      /* Use svh for mobile browsers to avoid URL bar layout shifts */
+      min-height: 100svh;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background:
         radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.35), transparent 45%),
@@ -37,6 +43,7 @@
       justify-content: center;
       color: #fff;
       overflow-x: hidden;
+      overflow-y: auto;
     }
 
     /* subtle animated ambient light */
@@ -64,6 +71,20 @@
       }
     }
 
+    /* Motion reduction for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+
+      body::before,
+      .card,
+      .heart,
+      .confetti,
+      .rose,
+      .firework-particle {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
     main {
       position: relative;
       width: 100%;
@@ -71,6 +92,7 @@
       z-index: 1;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -81,11 +103,13 @@
       max-width: 420px;
       background: var(--card-bg);
       backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border-radius: 28px;
       padding: clamp(28px, 8vw, 36px) clamp(20px, 6vw, 28px) clamp(32px, 8vw, 40px);
       text-align: center;
       box-shadow: 0 32px 70px rgba(0, 0, 0, 0.28);
-      animation: float 5s ease-in-out infinite;
+      animation: float 6s ease-in-out infinite;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     @keyframes float {
@@ -139,6 +163,8 @@
       transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
       min-height: 48px;
       touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     button:active {
@@ -188,7 +214,33 @@
       min-height: 1.4em;
     }
 
-    /* floating hearts kept minimal */
+    /* Valentine Week Special Card */
+    #weekSpecial {
+      display: none;
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      animation: fadeUp 0.8s ease-out;
+      text-align: left;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Floating elements */
     .heart {
       position: fixed;
       font-size: 20px;
@@ -199,7 +251,6 @@
       cursor: pointer;
     }
 
-    /* larger hit areas and touch feedback for mobile */
     .heart.touch-feedback {
       transition: transform 140ms ease-out, opacity 300ms linear;
       transform-origin: center center;
@@ -209,7 +260,7 @@
       .heart {
         font-size: 28px;
         padding: 8px;
-        /* larger tap target */
+        /* Larger tap target */
       }
     }
 
@@ -249,15 +300,15 @@
 
     @keyframes surpriseFlow {
       0% {
-        background-position: 0% 0%, 0% 0%, 0% 0%;
+        background-position: 0% 0%;
       }
 
       50% {
-        background-position: 100% 100%, 100% 100%, 100% 100%;
+        background-position: 100% 100%;
       }
 
       100% {
-        background-position: 0% 0%, 0% 0%, 0% 0%;
+        background-position: 0% 0%;
       }
     }
 
@@ -270,6 +321,7 @@
       width: 100%;
       background: rgba(255, 255, 255, 0.35);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 32px;
       padding: clamp(32px, 8vw, 44px) clamp(24px, 6vw, 32px);
       text-align: center;
@@ -306,10 +358,11 @@
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
     }
 
-    .firework {
+    .firework-particle {
       position: fixed;
       pointer-events: none;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      animation: explode 1.2s ease-out forwards;
     }
 
     @keyframes explode {
@@ -324,17 +377,11 @@
       }
     }
 
-    .firework-particle {
-      position: fixed;
-      pointer-events: none;
-      animation: explode 1.2s ease-out forwards;
-    }
-
-    /* confetti styles */
     .confetti {
       position: fixed;
       pointer-events: none;
       font-size: 1rem;
+      animation: confetti-fall 3s ease-in forwards;
     }
 
     @keyframes confetti-fall {
@@ -344,11 +391,6 @@
       }
     }
 
-    .confetti {
-      animation: confetti-fall 3s ease-in forwards;
-    }
-
-    /* floating roses */
     .rose {
       position: fixed;
       font-size: 24px;
@@ -365,21 +407,12 @@
         opacity: 0.7;
       }
 
-      25% {
-        transform: translateY(-100px) translateX(80px) rotate(20deg);
-      }
-
       50% {
         transform: translateY(-200px) translateX(0) rotate(0deg);
         opacity: 0.9;
       }
-
-      75% {
-        transform: translateY(-100px) translateX(-80px) rotate(-20deg);
-      }
     }
 
-    /* sparkle effect */
     .sparkle {
       position: fixed;
       pointer-events: none;
@@ -399,32 +432,11 @@
       }
     }
 
-    /* desktop tweaks */
-    @media (min-width: 480px) {
-      .buttons {
-        flex-direction: row;
-        gap: clamp(12px, 4vw, 22px);
-      }
-
-      button {
-        flex: 1;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .card {
-        padding: 44px 36px 48px;
-      }
-
-      button {
-        min-height: auto;
-      }
-    }
-
-    /* beating heart animation */
+    /* Beating heart & Easter Egg */
     .beating-heart {
       display: inline-block;
       animation: heartbeat 1.2s ease-in-out infinite;
+      cursor: pointer;
     }
 
     @keyframes heartbeat {
@@ -443,25 +455,24 @@
       }
     }
 
-    /* easter egg glow effect */
     @keyframes glow-burst {
       0% {
-        text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
+        text-shadow: 0 0 5px #ff1493;
         transform: scale(1);
       }
 
       50% {
-        text-shadow: 0 0 20px #ff1493, 0 0 30px #ff69b4, 0 0 40px #ffc0cb;
+        text-shadow: 0 0 30px #ff69b4;
         transform: scale(1.2);
       }
 
       100% {
-        text-shadow: 0 0 5px #ff1493, 0 0 10px #ff69b4;
+        text-shadow: 0 0 5px #ff1493;
         transform: scale(1);
       }
     }
 
-    /* NEW: Stats container styles */
+    /* Stats container */
     .stats-container {
       position: fixed;
       top: 14px;
@@ -476,9 +487,9 @@
     }
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: 8px 12px;
       border-radius: 12px;
       display: flex;
@@ -488,19 +499,9 @@
       color: #fff;
       pointer-events: auto;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .stat-card span {
-      opacity: 0.95;
-    }
-
-    .stat-card strong {
-      min-width: 28px;
-      text-align: right;
-      display: inline-block;
-    }
-
-    /* Countdown specific styling */
     .countdown-card {
       flex: 1;
       min-width: 200px;
@@ -511,7 +512,6 @@
       background: rgba(255, 215, 0, 0.15);
     }
 
-    /* Controls positioning */
     .controls {
       position: fixed;
       right: 14px;
@@ -520,9 +520,9 @@
     }
 
     .control-label {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: 8px 10px;
       border-radius: 12px;
       display: flex;
@@ -532,15 +532,9 @@
       color: #fff;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .control-label input {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    /* Responsive adjustments */
     @media (max-width: 640px) {
       .stats-container {
         flex-direction: column;
@@ -549,8 +543,8 @@
       }
 
       .countdown-card {
-        min-width: auto;
         width: 100%;
+        justify-content: flex-start;
       }
 
       .controls {
@@ -560,7 +554,12 @@
       }
     }
 
-    /* Streak fire emoji pulse */
+    @media (min-width: 480px) {
+      .buttons {
+        flex-direction: row;
+      }
+    }
+
     @keyframes fire-pulse {
 
       0%,
@@ -581,17 +580,17 @@
 </head>
 
 <body>
-
-  <audio id="music" loop>
+  <!-- Audio hidden but ready -->
+  <audio id="music" loop preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f7a2a0d2c.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Stats Container: Streak, Hearts, Countdown -->
+  <!-- Stats Header -->
   <div class="stats-container">
     <div class="stat-card" id="streakCard">
       <span>🔥 Streak:</span>
       <strong id="streakValue">0</strong>
-      <span>day<span id="streakPlural">s</span></span>
+      <span id="streakLabel">days</span>
     </div>
 
     <div class="stat-card">
@@ -604,14 +603,15 @@
     </div>
   </div>
 
-  <!-- Controls: Sound & Haptics opt-in -->
+  <!-- Controls -->
   <div class="controls">
     <label class="control-label">
-      <input id="toggleSound" type="checkbox" />
+      <input id="toggleSound" type="checkbox" style="width:16px;height:16px;" />
       <span>Sound & Haptics</span>
     </label>
   </div>
 
+  <!-- Main Card -->
   <main>
     <section class="card">
       <h1>Sujishna <span class="beating-heart">❤️</span></h1>
@@ -624,9 +624,27 @@
       </div>
 
       <div class="result" id="result"></div>
+
+      <!-- Valentine Week Special Display (Hidden by default) -->
+      <div id="weekSpecial">
+        <div
+          style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 8px;"
+          id="specialDateText"></div>
+        <h3 id="specialTitle"
+          style="margin: 0 0 16px; font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #fff;"></h3>
+        <div
+          style="width: 100%; height: 220px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+          <img id="specialImage" src="" alt="Special Day"
+            style="width: 100%; height: 100%; object-fit: cover; transition: transform 5s ease;"
+            onload="this.style.transform='scale(1.1)'">
+        </div>
+        <p id="specialDesc" style="font-size: 0.95rem; opacity: 0.95; margin: 0; line-height: 1.5; font-style: italic;">
+        </p>
+      </div>
     </section>
   </main>
 
+  <!-- Surprise Overlay -->
   <section class="surprise" id="surprise">
     <div class="surprise-card">
       <h1>💖 Surprise 💖</h1>
@@ -642,489 +660,266 @@
 
   <script>
     // ============================================
-    // CONFIGURATION & STATE
+    // CONFIG & STATE
     // ============================================
-    const isLowPower = (() => {
-      try {
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
-        const deviceMem = navigator.deviceMemory || 4;
-        const hw = navigator.hardwareConcurrency || 4;
-        return deviceMem <= 1.5 || hw <= 2;
-      } catch (e) {
-        return false;
-      }
-    })();
-
     const config = {
-      splitCount: isLowPower ? 3 : 5,
-      initialHeartCount: isLowPower ? 18 : 40,
-      maxHearts: isLowPower ? 30 : 120,
-      fireworkCount: isLowPower ? 12 : 30,
-      confettiPieces: isLowPower ? 20 : 50,
+      isLowPower: (() => {
+        try {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+          return (navigator.deviceMemory || 4) < 2;
+        } catch { return false; }
+      })(),
     };
 
     const state = {
       soundEnabled: localStorage.getItem('valentineSound') === 'true',
-      heartsPopped: parseInt(localStorage.getItem('heartsPopped') || '0', 10) || 0,
+      heartsPopped: parseInt(localStorage.getItem('heartsPopped') || '0', 10),
       visitStreak: 0,
       surpriseShown: false,
-      heartIntervalId: null,
+      heartInterval: null,
     };
 
     // ============================================
-    // VISIT STREAK TRACKING
+    // CORE FUNCTIONS
     // ============================================
+
+    // 1. Visit Streak
     function updateVisitStreak() {
       const today = new Date().toDateString();
       const lastVisit = localStorage.getItem('lastVisitDate');
       const currentStreak = parseInt(localStorage.getItem('visitStreak') || '0', 10);
 
       if (lastVisit === today) {
-        // Same day, no change
-        state.visitStreak = currentStreak;
+        state.visitStreak = Math.max(1, currentStreak);
       } else if (lastVisit) {
-        const lastDate = new Date(lastVisit);
-        const todayDate = new Date(today);
-        const diffTime = todayDate - lastDate;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 1) {
-          // Consecutive day
-          state.visitStreak = currentStreak + 1;
-        } else {
-          // Streak broken
-          state.visitStreak = 1;
-        }
+        const diff = (new Date(today) - new Date(lastVisit)) / (1000 * 60 * 60 * 24);
+        state.visitStreak = (Math.floor(diff) === 1) ? currentStreak + 1 : 1;
       } else {
-        // First visit
         state.visitStreak = 1;
       }
 
       localStorage.setItem('lastVisitDate', today);
-      localStorage.setItem('visitStreak', state.visitStreak.toString());
-      updateStreakDisplay();
-    }
+      localStorage.setItem('visitStreak', state.visitStreak);
 
-    function updateStreakDisplay() {
-      const streakValue = document.getElementById('streakValue');
-      const streakPlural = document.getElementById('streakPlural');
       const streakCard = document.getElementById('streakCard');
-
-      if (streakValue) {
-        streakValue.textContent = state.visitStreak;
-      }
-      if (streakPlural) {
-        streakPlural.textContent = state.visitStreak === 1 ? '' : 's';
-      }
-
-      // Add fire emoji animation for streaks >= 3
-      if (state.visitStreak >= 3) {
+      if (streakCard) {
+        const isFire = state.visitStreak >= 3;
         streakCard.innerHTML = `
-          <span class="fire-emoji">🔥</span>
-          <span>Streak:</span>
+          <span>${isFire ? '🔥' : '⚡'} Streak:</span>
           <strong>${state.visitStreak}</strong>
           <span>day${state.visitStreak === 1 ? '' : 's'}</span>
         `;
+        if (isFire) streakCard.querySelector('span').classList.add('fire-emoji');
       }
     }
 
-    // ============================================
-    // COUNTDOWN TO VALENTINE'S DAY
-    // ============================================
+    // 2. Countdown Timer
     function updateCountdown() {
       const now = new Date();
-      const currentYear = now.getFullYear();
-      const valentinesDay = new Date(currentYear, 1, 14); // Feb 14
+      const vDay = new Date(now.getFullYear(), 1, 14); // Feb 14
+      const card = document.getElementById('countdownCard');
+      const text = document.getElementById('countdownText');
 
-      // If Valentine's has passed this year, show "days since"
-      if (now > valentinesDay) {
-        const diffTime = now - valentinesDay;
-        const daysSince = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      // Clear time part for accurate day calculation
+      const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const vDayZero = new Date(vDay.getFullYear(), 1, 14);
 
-        const countdownCard = document.getElementById('countdownCard');
-        const countdownText = document.getElementById('countdownText');
+      const diffDays = Math.ceil((vDayZero - todayZero) / (1000 * 60 * 60 * 24));
 
-        if (countdownCard) countdownCard.classList.add('past');
-        if (countdownText) {
-          countdownText.innerHTML = `💕 ${daysSince} day${daysSince === 1 ? '' : 's'} since our Valentine's`;
-        }
+      if (diffDays === 0) {
+        text.innerHTML = `❤️ <strong>Happy Valentine's Day!</strong> ❤️`;
+      } else if (diffDays > 0) {
+        text.innerHTML = `💝 <strong>${diffDays}</strong> day${diffDays === 1 ? '' : 's'} until Valentine's!`;
       } else {
-        // Countdown to Valentine's
-        const diffTime = valentinesDay - now;
-        const daysUntil = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const daysSince = Math.abs(diffDays);
+        text.innerHTML = `💕 ${daysSince} day${daysSince === 1 ? '' : 's'} since our Valentine's`;
+        card.classList.add('past');
+      }
+    }
 
-        const countdownText = document.getElementById('countdownText');
-        if (countdownText) {
-          if (daysUntil === 0) {
-            countdownText.innerHTML = `❤️ <strong>Happy Valentine's Day!</strong> ❤️`;
-          } else {
-            countdownText.innerHTML = `💝 <strong>${daysUntil}</strong> day${daysUntil === 1 ? '' : 's'} until Valentine's!`;
-          }
+    // 3. Valentine Week Specials
+    function checkValentineWeek() {
+      const now = new Date();
+      const month = now.getMonth(); // 1 = Feb
+      const date = now.getDate();
+
+      const weekData = {
+        7: { title: "🌹 Rose Day", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop", desc: "A single rose speaks more than a thousand words." },
+        8: { title: "💍 Propose Day", img: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=600&auto=format&fit=crop", desc: "It's not about the ring, it's about the feeling." },
+        9: { title: "🍫 Chocolate Day", img: "https://images.unsplash.com/photo-1606312619070-d48b706521bf?q=80&w=600&auto=format&fit=crop", desc: "Something sweet for someone sweeter." },
+        10: { title: "🧸 Teddy Day", img: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?q=80&w=600&auto=format&fit=crop", desc: "Soft hugs and warm cuddles." },
+        11: { title: "🤝 Promise Day", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop", desc: "Promises are the glue of love." },
+        12: { title: "🤗 Hug Day", img: "https://images.unsplash.com/photo-1517867065801-e20f409696b0?q=80&w=600&auto=format&fit=crop", desc: "Sometimes a hug is all we need." },
+        13: { title: "💋 Kiss Day", img: "https://images.unsplash.com/photo-1522511853606-d50d03b71158?q=80&w=600&auto=format&fit=crop", desc: "A touch of love that lasts forever." },
+        14: { title: "❤️ Valentine's Day", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop", desc: "To the world you may be one person, but to one person you are the world." }
+      };
+
+      if (month === 1 && weekData[date]) {
+        const data = weekData[date];
+        const container = document.getElementById('weekSpecial');
+        if (container) {
+          document.getElementById('specialTitle').textContent = data.title;
+          document.getElementById('specialImage').src = data.img;
+          document.getElementById('specialDesc').textContent = data.desc;
+          document.getElementById('specialDateText').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+          container.style.display = 'block';
         }
       }
     }
 
-    // ============================================
-    // HEARTS POPPED COUNTER
-    // ============================================
-    function updateHeartCounterDisplay() {
-      const el = document.getElementById('heartCounterValue');
-      if (el) el.textContent = state.heartsPopped;
-    }
-
-    // ============================================
-    // AUDIO SETUP
-    // ============================================
+    // 4. Interaction Logic
     const audioCtx = (typeof AudioContext !== 'undefined') ? new AudioContext() : null;
-
     function playPop() {
-      if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume().catch(() => { });
-      }
-      const bufferSize = 0.2 * audioCtx.sampleRate;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
-      }
-      const src = audioCtx.createBufferSource();
-      src.buffer = buffer;
+      if (!audioCtx || !state.soundEnabled) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => { });
+
+      const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      gain.gain.value = 0.18;
-      src.connect(gain).connect(audioCtx.destination);
-      src.start();
-      setTimeout(() => { try { src.stop(); } catch (e) { } }, 300);
+      osc.frequency.setValueAtTime(400 + Math.random() * 200, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
     }
 
-    // ============================================
-    // MAIN INTERACTIONS
-    // ============================================
-    function sayYes() {
-      document.getElementById('result').textContent = 'Yay! I knew it 💕';
-
-      if (navigator.vibrate) {
-        navigator.vibrate([20, 30, 20]);
-      }
-
-      const musicEl = document.getElementById('music');
-      if (musicEl) {
-        musicEl.play().catch(() => {
-          console.log('Audio autoplay prevented by browser');
-        });
-      }
-
-      for (let i = 0; i < config.initialHeartCount; i++) createHeart();
-      createConfetti();
-
-      setTimeout(() => {
-        state.surpriseShown = true;
-        document.getElementById('surprise').classList.add('show');
-        triggerFireworks();
-        createFloatingRoses();
-
-        if (navigator.vibrate) {
-          navigator.vibrate(25);
-        }
-
-        // Stop creating hearts after surprise is shown
-        if (state.heartIntervalId) {
-          clearInterval(state.heartIntervalId);
-          state.heartIntervalId = null;
-        }
-      }, 1200);
-    }
-
-    function moveNo(btn) {
-      const maxX = Math.min(150, window.innerWidth / 4);
-      const maxY = Math.min(150, window.innerHeight / 4);
-      const x = (Math.random() * 2 - 1) * maxX;
-      const y = (Math.random() * 2 - 1) * maxY;
-      btn.style.transform = `translate(${x}px, ${y}px)`;
-    }
-
-    // ============================================
-    // HEART ANIMATIONS
-    // ============================================
     function createHeart() {
-      if (document.querySelectorAll('.heart').length >= config.maxHearts) return;
+      if (document.querySelectorAll('.heart').length > (config.isLowPower ? 20 : 60)) return;
 
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.textContent = '❤️';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = 8 + Math.random() * 4 + 's';
-      heart.style.cursor = 'pointer';
+      heart.style.animationDuration = (6 + Math.random() * 4) + 's';
       document.body.appendChild(heart);
 
-      const onInteract = (e) => {
+      const popHeart = (e) => {
         e.stopPropagation();
-        heart.classList.add('touch-feedback');
-        heart.style.transform = 'scale(1.15)';
-        setTimeout(() => {
-          heart.style.transform = '';
-          heart.classList.remove('touch-feedback');
-        }, 160);
-
-        if (state.soundEnabled) playPop();
-        if (state.soundEnabled && navigator.vibrate) navigator.vibrate(18);
-
+        // Get bounding rect BEFORE removing the heart
         const rect = heart.getBoundingClientRect();
-        const x = rect.left + rect.width / 2;
-        const y = rect.top + rect.height / 2;
-
-        for (let i = 0; i < config.splitCount; i++) {
-          const angle = (i / config.splitCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-          createSplitHeart(x, y, angle);
-        }
-
-        state.heartsPopped++;
-        try {
-          localStorage.setItem('heartsPopped', String(state.heartsPopped));
-        } catch (e) { }
-        updateHeartCounterDisplay();
-
         heart.remove();
+        state.heartsPopped++;
+        localStorage.setItem('heartsPopped', state.heartsPopped);
+        document.getElementById('heartCounterValue').textContent = state.heartsPopped;
+        playPop();
+        if (state.soundEnabled && navigator.vibrate) navigator.vibrate(5);
+
+        // Spawn mini hearts from center
+        for (let i = 0; i < (config.isLowPower ? 3 : 6); i++) {
+          createMiniHeart(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        }
       };
 
-      heart.addEventListener('click', onInteract, { once: true });
-      heart.addEventListener('touchstart', onInteract, { once: true, passive: true });
+      heart.addEventListener('click', popHeart, { once: true });
+      heart.addEventListener('pointerdown', popHeart, { once: true });
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    function createMiniHeart(x, y) {
+      const el = document.createElement('div');
+      el.textContent = '❤️';
+      el.style.position = 'fixed';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.fontSize = '12px';
+      el.style.pointerEvents = 'none';
+      el.style.transition = 'all 0.8s ease-out';
+      document.body.appendChild(el);
+
+      requestAnimationFrame(() => {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 60 + Math.random() * 60;
+        el.style.transform = `translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity}px) scale(0)`;
+        el.style.opacity = '0';
+      });
+      setTimeout(() => el.remove(), 800);
+    }
+
+    function sayYes() {
+      document.getElementById('result').textContent = 'Yay! I knew it 💕';
+      const music = document.getElementById('music');
+      if (music) music.play().catch(e => console.log('Audio blocked', e));
+
+      if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+      // Burst effects
+      for (let i = 0; i < 30; i++) setTimeout(createHeart, i * 50);
+      createConfetti();
 
       setTimeout(() => {
-        if (heart.parentElement) heart.remove();
-      }, 13000);
-    }
-
-    function createSplitHeart(x, y, direction) {
-      const splitHeart = document.createElement('div');
-      splitHeart.textContent = '❤️';
-      splitHeart.style.position = 'fixed';
-      splitHeart.style.left = x + 'px';
-      splitHeart.style.top = y + 'px';
-      splitHeart.style.fontSize = '14px';
-      splitHeart.style.pointerEvents = 'none';
-      splitHeart.style.margin = '0';
-      splitHeart.style.padding = '0';
-      splitHeart.style.transform = 'translate(-50%, -50%)';
-      document.body.appendChild(splitHeart);
-
-      let posX = x;
-      let posY = y;
-      const velMult = isLowPower ? 3 : 6;
-      let velocityX = Math.cos(direction) * velMult * (0.8 + Math.random() * 0.8);
-      let velocityY = Math.sin(direction) * velMult * (0.6 + Math.random() * 0.8) - (isLowPower ? 2 : 3);
-      let opacity = 1;
-      let scale = 1;
-
-      const animate = () => {
-        posX += velocityX;
-        posY += velocityY;
-        velocityY += 0.12;
-        opacity -= 0.012;
-        scale += 0.002;
-
-        splitHeart.style.left = posX + 'px';
-        splitHeart.style.top = posY + 'px';
-        splitHeart.style.opacity = opacity;
-        splitHeart.style.transform = `translate(-50%, -50%) scale(${scale})`;
-
-        if (opacity > 0) {
-          requestAnimationFrame(animate);
-        } else {
-          splitHeart.remove();
-        }
-      };
-
-      animate();
-    }
-
-    // ============================================
-    // EFFECTS
-    // ============================================
-    function triggerFireworks() {
-      const emojis = ['✨', '🎆', '⭐', '💫', '🌟'];
-      for (let i = 0; i < config.fireworkCount; i++) {
-        setTimeout(() => {
-          const x = window.innerWidth / 2;
-          const y = 60;
-          createFirework(x, y, emojis[Math.floor(Math.random() * emojis.length)]);
-        }, i * 100);
-      }
-    }
-
-    function createFirework(x, y, emoji) {
-      const particle = document.createElement('div');
-      particle.className = 'firework-particle';
-      particle.textContent = emoji;
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.fontSize = '1.2rem';
-
-      const angle = (Math.PI * 2 * Math.random());
-      const velocity = 150 + Math.random() * 200;
-      const tx = Math.cos(angle) * velocity;
-      const ty = Math.sin(angle) * velocity;
-
-      particle.style.setProperty('--tx', tx + 'px');
-      particle.style.setProperty('--ty', ty + 'px');
-
-      document.getElementById('surprise').appendChild(particle);
-      setTimeout(() => particle.remove(), 1200);
+        state.surpriseShown = true;
+        document.getElementById('surprise').classList.add('show');
+        clearInterval(state.heartInterval);
+      }, 1500);
     }
 
     function createConfetti() {
-      const confettiPieces = ['🎉', '✨', '🎊', '💝', '🌹'];
-      for (let i = 0; i < config.confettiPieces; i++) {
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.textContent = confettiPieces[Math.floor(Math.random() * confettiPieces.length)];
-          confetti.style.left = Math.random() * 100 + 'vw';
-          confetti.style.top = '-20px';
-          confetti.style.animationDuration = `${2 + Math.random() * 1}s`;
-          confetti.style.animationDelay = `${i * 20}ms`;
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 3000);
-        }, i * 30);
+      const colors = ['#ff6b9d', '#ffc75f', '#845ef7'];
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.textContent = ['🎉', '✨', '💖'][Math.floor(Math.random() * 3)];
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.animationDuration = (2 + Math.random()) + 's';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
       }
     }
 
-    function createFloatingRoses() {
-      const surpriseElement = document.getElementById('surprise');
-      const roses = 5;
-      for (let i = 0; i < roses; i++) {
-        const rose = document.createElement('div');
-        rose.className = 'rose';
-        rose.textContent = '🌹';
-        rose.style.left = Math.random() * 90 + 5 + 'vw';
-        rose.style.top = Math.random() * 100 + 'vh';
-        rose.style.animationDelay = i * 0.5 + 's';
-        rose.style.animationDuration = (6 + Math.random() * 4) + 's';
-        surpriseElement.appendChild(rose);
-      }
-    }
-
-    function createSparkle(x, y) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.textContent = '✨';
-      sparkle.style.left = x + 'px';
-      sparkle.style.top = y + 'px';
-      sparkle.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 1000);
+    function moveNo(btn) {
+      const x = (Math.random() - 0.5) * Math.min(window.innerWidth - 100, 300);
+      const y = (Math.random() - 0.5) * Math.min(window.innerHeight - 100, 300);
+      btn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
     // ============================================
-    // EASTER EGG
+    // INIT
     // ============================================
-    let heartClickCount = 0;
-
-    function setupEasterEgg() {
-      const beatingHeart = document.querySelector('.beating-heart');
-      if (beatingHeart) {
-        beatingHeart.style.cursor = 'pointer';
-        beatingHeart.style.userSelect = 'none';
-        beatingHeart.addEventListener('click', (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          heartClickCount++;
-
-          beatingHeart.style.animation = 'none';
-          setTimeout(() => {
-            beatingHeart.style.animation = 'glow-burst 0.6s ease-in-out';
-          }, 10);
-
-          if (heartClickCount === 5) {
-            triggerEasterEgg();
-            heartClickCount = 0;
-          }
-        });
-      }
-    }
-
-    function triggerEasterEgg() {
-      for (let i = 0; i < 25; i++) {
-        setTimeout(() => createHeart(), i * 30);
-      }
-
-      createConfetti();
-
-      const resultDiv = document.getElementById('result');
-      if (resultDiv) {
-        resultDiv.textContent = '✨ Secret unlocked! You found the easter egg! ✨';
-        resultDiv.style.color = '#ff69b4';
-        resultDiv.style.fontSize = '1rem';
-        setTimeout(() => {
-          resultDiv.textContent = '';
-        }, 3000);
-      }
-    }
-
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    function initializeApp() {
-      // Update counters
+    window.addEventListener('DOMContentLoaded', () => {
+      // Restore state
       updateVisitStreak();
-      updateHeartCounterDisplay();
       updateCountdown();
+      checkValentineWeek();
+      document.getElementById('heartCounterValue').textContent = state.heartsPopped;
 
-      // Sound toggle
-      const cb = document.getElementById('toggleSound');
-      if (cb) {
-        cb.checked = state.soundEnabled;
-        cb.addEventListener('change', (e) => {
-          state.soundEnabled = !!e.target.checked;
-          localStorage.setItem('valentineSound', state.soundEnabled ? 'true' : 'false');
-          if (state.soundEnabled && navigator.vibrate) navigator.vibrate(15);
+      const toggle = document.getElementById('toggleSound');
+      if (toggle) {
+        toggle.checked = state.soundEnabled;
+        toggle.addEventListener('change', (e) => {
+          state.soundEnabled = e.target.checked;
+          localStorage.setItem('valentineSound', state.soundEnabled);
         });
       }
 
-      // Button event listeners
-      const btnYes = document.getElementById('btnYes');
+      // Event Listeners
+      document.getElementById('btnYes').addEventListener('click', sayYes);
       const btnNo = document.getElementById('btnNo');
+      btnNo.addEventListener('pointerover', () => moveNo(btnNo));
+      btnNo.addEventListener('click', (e) => { e.preventDefault(); moveNo(btnNo); });
 
-      if (btnYes) {
-        btnYes.addEventListener('click', sayYes);
-      }
-
-      if (btnNo) {
-        btnNo.addEventListener('pointerenter', () => moveNo(btnNo));
-        btnNo.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          moveNo(btnNo);
-        });
-      }
-
-      // Easter egg
-      setupEasterEgg();
-
-      // Start heart creation
+      // Start looping hearts
       createHeart();
-      state.heartIntervalId = setInterval(() => {
-        if (!state.surpriseShown) {
-          createHeart();
-        }
-      }, 500);
+      state.heartInterval = setInterval(() => {
+        if (!state.surpriseShown && document.visibilityState === 'visible') createHeart();
+      }, 600);
 
-      // Sparkle effect on mouse move
-      document.addEventListener('mousemove', (e) => {
-        if (Math.random() > 0.92) {
-          createSparkle(e.clientX, e.clientY);
+      // Easter Egg
+      let clicks = 0;
+      const heart = document.querySelector('.beating-heart');
+      heart.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clicks++;
+        heart.style.animation = 'none';
+        setTimeout(() => heart.style.animation = 'glow-burst 0.5s', 10);
+        if (clicks === 5) {
+          alert("✨ You found the secret! I love you! ✨");
+          clicks = 0;
         }
       });
-
-      // Update countdown every hour
-      setInterval(updateCountdown, 3600000);
-    }
-
-    // Start when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeApp);
-    } else {
-      initializeApp();
-    }
+    });
   </script>
 </body>
 
